@@ -14,3 +14,10 @@ def fb(n):
         result = str(n)
 
     return result
+
+def main():
+    for i in range(1,100):
+        print fb(i)
+
+if __name__ == '__main__':
+    main()
