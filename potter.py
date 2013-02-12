@@ -35,13 +35,40 @@ def price(items):
 
     discount_id = 0
 
+    # filter 0 counts
+
+
     while sum(book_counts) > 0:
+
+        remaining_books = filter(lambda x: x > 0, book_counts)
+
+        print 'start'
+        print remaining_books
+        print book_counts
+
         for index, value in enumerate(book_counts):
-            if value > 0:
-                discount_id += 1
-                book_counts[index] -= 1
+            if len(book_counts) > 3:
+                if value > 1 or discount_id == 3:
+                    discount_id += 1
+                    book_counts[index] -= 1
+
+        print 'cont'
+        print remaining_books
+        print book_counts
+
+        if discount_id == 0:
+             for index, value in enumerate(book_counts):
+                if value > 0:
+                    discount_id += 1
+                    book_counts[index] -= 1
+
+        print discount_id
 
         total += discount_id * 8 * discounts[discount_id]
         discount_id = 0
+
+        print 'end'
+        print remaining_books
+        print book_counts
 
     return total
