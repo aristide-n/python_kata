@@ -16,5 +16,6 @@ class TestCoinChanger(TestCase):
 
 
 
-def coin_changer(amount):
-    NotImplemented
+def coin_changer(amount, coins):
+    amount *= 100
+
