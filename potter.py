@@ -23,9 +23,8 @@ def price(items):
 
     This is my optimal Algorithm for Potter:
     (case's solution; inspired by http://ardalis.com/a-first-pass-at-potterkata)
-        1. Sort the list of books
-        2. Create an ordered list of 5 items, each item is the count of each book in the basket, from book 1 to book 5
-        3. Iterate through the list until the sum of the items is 0 (empty basket). Per iteration:
+        1. Create an ordered list of 5 items, each item is the count of each book in the basket, from book 1 to book 5
+        2. Iterate through the list until the sum of the items is 0 (empty basket). Per iteration:
             I. For each book of a different type:
                 a. check if there is 2 or more of that type or that we have already found exactly 3 different books
                     with the previous property
@@ -48,8 +47,6 @@ def price(items):
     """
 
     total = 0
-
-    sorted(items)
 
     book_counts = count_same_book(items)
 
