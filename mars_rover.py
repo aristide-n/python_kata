@@ -1,6 +1,5 @@
 __author__ = 'Aristide'
 
-
 # Coordinates
 X_COORD = 0
 Y_COORD = 1
@@ -11,25 +10,35 @@ SOUTH = 'south'
 EAST = 'east'
 WEST = 'west'
 
+DIRECTIONS_LIST = [NORTH, SOUTH, EAST, WEST]
 
 class Planet:
     """
     Abstraction of a planet.
 
     Doctests:
-        >>> p = Planet((5,5), obstacles_set=[(1,1)])
+        >>> p = Planet((5,5), obstacles_list=[(1,1)])
         >>> p.get_size()
         (5, 5)
 
         >>> p.position_is_accessible((1,1))
         False
+
+        >>> p.position_is_accessible((3,1))
+        True
+
+        >>> p.set_obstacles([(3, 1), (7, 8)])
+        >>> p.position_is_accessible((3,1))
+        False
+        >>> p.position_is_accessible((7, 8))
+        False
     """
 
-    def __init__(self, size, obstacles_set = None):
+    def __init__(self, size, obstacles_list = None):
         self._size = size
         self._geometry = dict( ((i,j),True) for i in range(size[0]) for j in range(size[1]) )
 
-        if obstacles_set: self.set_obstacles(obstacles_set)
+        if obstacles_list is not None: self.set_obstacles(obstacles_list)
 
 
     def get_size(self):
@@ -37,13 +46,14 @@ class Planet:
 
 
     def position_is_accessible(self, position):
-        return self._geometry[position]
+        wrapped_position = (position[X_COORD] % self._size[0], position[Y_COORD] % self._size[1])
+        return self._geometry[wrapped_position]
 
 
-    def set_obstacles(self, obstacles_set):
-        # Add wraparound (accept any coordinate val)
-        for o in obstacles_set:
-            self._geometry[o] = False
+    def set_obstacles(self, obstacles_list):
+        for obstacle in obstacles_list:
+            obstacle_position = (obstacle[X_COORD] % self._size[0], obstacle[Y_COORD] % self._size[1])
+            self._geometry[obstacle_position] = False
 
 
 
@@ -55,55 +65,59 @@ class Rover:
 
     Doctests:
 
-        >>> p = Planet((5,5), [(2,2),(1,1)])
-        >>> r = Rover (p, (0,0), NORTH)
+        >>> planet = Planet((5,5), obstacles_list=[(2,2),(1,1)])
+        >>> rover = Rover (planet, (0,0), NORTH)
 
-        >>> r.get_position()
+        >>> rover.get_position()
         (0, 0)
 
-        >>> r.set_position((8,8))
+        >>> rover.set_position((8,8))
         (3, 3)
 
-        >>> r.get_direction() is NORTH
+        >>> rover.get_direction() is NORTH
         True
 
-        >>> r.go_forth().get_position()
+        >>> rover.go_forth().get_position()
         (3, 4)
 
-        >>> r.go_back().get_position()
+        >>> rover.go_back().get_position()
         (3, 3)
 
-        >>> r.set_direction(SOUTH) is SOUTH
+        >>> rover.set_direction(SOUTH) is SOUTH
         True
 
-        >>> r.go_forth().get_position()
+        >>> rover.go_forth().get_position()
         (3, 2)
 
-        >>> r.go_back().get_position()
+        >>> rover.go_back().get_position()
         (3, 3)
 
-        >>> r.turn_left().get_direction() is EAST
+        >>> rover.turn_left().get_direction() is EAST
         True
 
-        >>> r.go_forth().get_position()
+        >>> rover.go_forth().get_position()
         (4, 3)
 
-        >>> r.go_back().get_position()
+        >>> rover.go_back().get_position()
         (3, 3)
 
-        >>> r.turn_right().turn_right().get_direction() is WEST
+        >>> rover.turn_right().turn_right().get_direction() is WEST
         True
 
-        >>> r.go_forth().get_position()
+        >>> rover.go_forth().get_position()
         (2, 3)
 
-        >>> r.go_back().get_position()
+        >>> rover.go_back().get_position()
         (3, 3)
 
-        >>> r.go_forth().turn_left().go_forth().get_position()
+        >>> rover.go_forth().turn_left().go_forth().get_position()
         Obstacle averted!
         (4, 4)
 
+        >>> rover.get_direction()
+        'south'
+        >>> rover.set_direction('test')
+        'north'
     """
 
     def __init__(self, planet, position, direction):
@@ -111,7 +125,8 @@ class Rover:
         self._planet = planet
         self._position = None
         self.set_position(position)
-        self._direction = direction
+        self.set_direction(direction)
+
 
 
     def set_position(self,position):
@@ -119,7 +134,8 @@ class Rover:
         max_position = self._planet.get_size()
         new_position = (position[X_COORD] % max_position[0], position[Y_COORD] % max_position[1])
 
-        if self._planet.position_is_accessible(new_position): self._position = new_position
+        if self._planet.position_is_accessible(new_position):
+            self._position = new_position
         else:
             self._position = (max_position[0] - 1, max_position[1] - 1)
             print ("Obstacle averted!")
@@ -132,7 +148,9 @@ class Rover:
 
 
     def set_direction(self, direction):
-        self._direction = direction
+        # Set the direction. If the value is invalid, assume NORTH.
+        self._direction = direction if direction in DIRECTIONS_LIST else NORTH
+
         return self._direction
 
 
@@ -190,14 +208,14 @@ class Rover:
         """
         change the direction depending on the current direction
         """
-        right_values = {
+        right_actions = {
             NORTH : EAST,
             SOUTH : WEST,
             EAST : SOUTH,
             WEST : NORTH
         }
 
-        self._direction = right_values.get(self._direction)
+        self._direction = right_actions.get(self._direction)
         return self
 
 
@@ -205,20 +223,20 @@ class Rover:
         """
         change the direction depending on the current direction
         """
-        right_values = {
+        left_actions = {
             NORTH : WEST,
             SOUTH : EAST,
             EAST : NORTH,
             WEST : SOUTH
         }
 
-        self._direction = right_values.get(self._direction)
+        self._direction = left_actions.get(self._direction)
         return self
 
 
 
 
-def explore_mars(start_point, direction, commands):
+def explore_mars(start_point, direction, commands_list):
     """
     Test an api that moves a rover around on a grid:
 
@@ -242,18 +260,18 @@ def explore_mars(start_point, direction, commands):
         (99, 99)
     """
 
-    mars = Planet((100, 100), [(5,2)])
+    mars = Planet((100, 100),  obstacles_list= [(5,2)])
     curiosity = Rover(mars, start_point, direction)
 
-    command_values = {
+    command_actions = {
         'f': curiosity.go_forth,
         'b': curiosity.go_back,
         'r': curiosity.turn_right,
         'l': curiosity.turn_left
     }
 
-    for c in commands:
-        command_values.get(c)()
+    for command in commands_list:
+        command_actions.get(command)()
 
     return curiosity.get_position()
 
