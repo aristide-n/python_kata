@@ -1,7 +1,9 @@
 __author__ = 'Aristide'
 
-from primefactors import generate
 import unittest
+
+from tdd.primefactors import generate
+
 
 class TestPrimeFactors(unittest.TestCase):
 

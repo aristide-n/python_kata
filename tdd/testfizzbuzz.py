@@ -1,7 +1,9 @@
 __author__ = 'Aristide'
 
-from fizzbuzz import fb
 import unittest
+
+from tdd.fizzbuzz import fb
+
 
 class TestFB(unittest.TestCase):
 

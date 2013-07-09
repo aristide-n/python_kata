@@ -1,8 +1,11 @@
 __author__ = 'Aristide'
 
-from nose.tools import assert_equal, assert_true
 from unittest import TestCase
-from potter import price
+
+from nose.tools import assert_equal, assert_true
+
+from tdd.potter import price
+
 
 class TestPotterPrice(TestCase):
 

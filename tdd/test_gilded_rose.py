@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
-from gilded_rose import Item, update_quality
+from tdd.gilded_rose import Item, update_quality
 
 
 class GildedRoseTest(unittest.TestCase):
