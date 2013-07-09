@@ -1,4 +1,4 @@
 python_kata
 ===========
 
-My parking lot for programing exercises.
+My parking lot for python programing exercises.
