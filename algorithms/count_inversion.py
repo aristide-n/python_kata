@@ -24,7 +24,7 @@ def count_inversions(uncounted_list):
         >>> count_inversions([2, 4, 6, 5, 1, 3]) == {'count': 8, 'list': [1, 2, 3, 4, 5, 6]}
         True
 
-    Test n^2 inversions list
+    Test max inversions list
         >>> count_inversions([8, 7, 6, 5, 4, 3, 2, 1]) == {'count': 28, 'list': [1, 2, 3, 4, 5, 6, 7, 8]}
         True
 
