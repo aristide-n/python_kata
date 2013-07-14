@@ -46,7 +46,7 @@ def sort(unsorted_list):
 
 def merge(left_sorted_list, right_sorted_list):
     """
-    merge traverses each sorted list comparing the fron elements. The smaller of the two is the next eleemnt in the
+    merge traverses each sorted list comparing the front elements. The smaller of the two is the next element in the
     sorted merged list
     """
     merged_sorted_list = [None] * (len(left_sorted_list) + len(right_sorted_list))
