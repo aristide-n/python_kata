@@ -1,6 +1,7 @@
 __author__ = 'Aristide'
 
-
+# The keys 0 to 9 are assigned letters or null. Given a sequence of keypresses, print all the possible combinations
+# of letters.
 
 keymap = [None,"vtfrq","ftk","wzbg","rs",None,"fir","p","lo","p"]
 
