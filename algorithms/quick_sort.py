@@ -65,7 +65,7 @@ def sort(unsorted_list , left_index, right_index):
 
         sort(unsorted_list, final_pivot_index+1, right_index)
 
-    # return list - this should not be necessary
+    
 
 
 def partition(unpartitioned_list, left_index, right_index):
