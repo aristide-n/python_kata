@@ -6,17 +6,20 @@ __author__ = 'Aristide'
 #===========================================================================================
 # The first algorithm executes in O(n) time
 
-def find_max_subarray(array):
+def find_max_subarray_n(array):
     """
     Return a tuple of the beginning and the end index of the subarray, in that order
     Doctests:
-        >>> find_max_subarray([5, -10, 4, 3, 2, 0, 1, -3, 7])
+        >>> find_max_subarray_n([5, -10, 4, 3, 2, 0, 1, -3, 7])
         (2, 8)
 
-        >>> find_max_subarray([-5, -10, 4, 3, 2, 0, 1, -3, 7])
+        >>> find_max_subarray_n([-5, -10, 4, 3, 2, 0, 1, -3, 7])
         (2, 8)
 
-        >>> find_max_subarray([-5, -40, -4, -3, -2, -1, -3, -7])
+        >>> find_max_subarray_n2([-5, -10, 4, 3, 2, 0, 1, -3, 7, 0, -6])
+        (2, 9)
+
+        >>> find_max_subarray_n([-5, -40, -4, -3, -2, -1, -3, -7])
         (5, 5)
 
     """
@@ -43,9 +46,45 @@ def find_max_subarray(array):
     return (subarray_beginning, subarray_end)
 
 
+
 #===========================================================================================
 # The second algorithm is the (good) old brute force. It executes in O(n^2) time
 
+def find_max_subarray_n2(array):
+    """
+    Return a tuple of the beginning and the end index of the subarray, in that order
+    Doctests:
+        >>> find_max_subarray_n2([5, -10, 4, 3, 2, 0, 1, -3, 7])
+        (2, 8)
+
+        >>> find_max_subarray_n2([-5, -10, 4, 3, 2, 0, 1, -3, 7])
+        (2, 8)
+
+        >>> find_max_subarray_n2([-5, -10, 4, 3, 2, 0, 1, -3, 7, 0, -6])
+        (2, 9)
+
+        >>> find_max_subarray_n2([-5, -40, -4, -3, -2, -1, -3, -7])
+        (5, 5)
+
+    """
+
+    subarray_beginning = 0
+    subarray_end = 0
+    max_sum = array[0]
+
+    for i in range(len(array)):
+        temp_sum = 0
+
+        for j in range(i, len(array)):
+            temp_sum += array[j]
+
+            if temp_sum >= max_sum:
+                max_sum = temp_sum
+
+                subarray_beginning = i
+                subarray_end = j
+
+    return (subarray_beginning, subarray_end)
 
 
 
